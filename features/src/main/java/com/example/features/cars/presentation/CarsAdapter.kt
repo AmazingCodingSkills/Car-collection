@@ -30,6 +30,7 @@ class CarsAdapter(val onClick: (Cars) -> Unit) :
             Glide.with(itemView)
                 .load(item.image)
                 .into(imageCar)
+            //утечка
         }
 
         init {

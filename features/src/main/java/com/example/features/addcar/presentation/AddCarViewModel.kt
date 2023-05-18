@@ -4,21 +4,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.room.data.Cars
 import com.example.core.room.domain.CarRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.features.cars.presentation.CarsViewState
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 
-class AddCarViewModel( val carRepository: CarRepository) : ViewModel() {
+class AddCarViewModel( private val carRepository: CarRepository) : ViewModel() {
 
     private var carName: String = ""
     private var carImage: String = ""
-    private var carYear: Int? = null
-    private var carEngine: Double? = null
-    private var date: Long? = null
+    private var carYear: Int = 0
+    private var carEngine: Double = 0.0
 
     private val viewState = MutableStateFlow<AddCarViewState>(AddCarViewState.Loading)
     val state: StateFlow<AddCarViewState> = viewState.asStateFlow()
+
+    private val viewEvents = Channel<AddCarViewEvents>(Channel.UNLIMITED)
+    val events: Flow<AddCarViewEvents> = viewEvents.receiveAsFlow()
 
     fun handleAction(action: AddCarViewAction) {
         when (action) {
@@ -26,10 +29,10 @@ class AddCarViewModel( val carRepository: CarRepository) : ViewModel() {
             is AddCarViewAction.YearCar -> setCarYear(action.input)
             is AddCarViewAction.EngineCar -> setCarEngine(action.input)
             is AddCarViewAction.ImageCar -> setCarImage(action.input)
-            is AddCarViewAction.Date -> setDate(action.input)
             is AddCarViewAction.SaveCar -> saveCarToDatabase()
         }
     }
+
 
 
     private fun setCarName(name: String) {
@@ -40,31 +43,29 @@ class AddCarViewModel( val carRepository: CarRepository) : ViewModel() {
         carImage = image
     }
 
-    private fun setCarYear(year: Int?) {
+    private fun setCarYear(year: Int) {
         carYear = year
     }
 
-    private fun setCarEngine(engine: Double?) {
+    private fun setCarEngine(engine: Double) {
         carEngine = engine
     }
 
-    private fun setDate(date: Long?) {
-        this.date = date
-    }
 
 
     private fun saveCarToDatabase() {
+
         val car = Cars(
             name = carName,
-            year = carYear!!,
-            engine = carEngine!!,
+            year = carYear,
+            engine = carEngine,
             image = carImage,
-            date = date!!
+            date = Date().time
         )
         viewModelScope.launch {
             try {
                 carRepository.insertCar(car)
-                viewState.value = AddCarViewState.Success
+                viewEvents.trySend(AddCarViewEvents.DismissScreen)
             } catch (e: Exception) {
                 viewState.value = AddCarViewState.Empty
             }

@@ -5,6 +5,7 @@ import androidx.room.*
 @Dao
 interface CarItemDao {
 
+    //олитика на уникальность
     @Insert
     suspend fun insertCar(cars: Cars)
 
