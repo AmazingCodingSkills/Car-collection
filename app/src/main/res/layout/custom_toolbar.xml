@@ -47,8 +47,21 @@
             android:layout_marginBottom="4dp"
             android:src="@drawable/ic_baseline_sort_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/backBtn"
             app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorSecondaryVariant"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/backBtn"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/ic_baseline_close_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:tint="?attr/colorSecondaryVariant"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
