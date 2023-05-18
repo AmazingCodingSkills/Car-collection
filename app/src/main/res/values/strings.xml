@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Car collection</string>
     <string name="head_app">Коллекция машин</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="head_add_car">Добавление авто</string>
+    <string name="edit_name_car">Добавтье марку авто</string>
+    <string name="edit_year_car">Добавтье год выпуска авто</string>
+    <string name="edit_engine_car">Добавтье объем двигателя авто</string>
+    <string name="add_car">Добавить</string>
 </resources>

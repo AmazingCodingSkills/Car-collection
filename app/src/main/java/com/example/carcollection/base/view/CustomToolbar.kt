@@ -29,9 +29,12 @@ class CustomToolbar @JvmOverloads constructor(
             typedArray.getBoolean(R.styleable.CustomToolbar_ctbIsBtnSettings, false)
         val changeSort =
             typedArray.getBoolean(R.styleable.CustomToolbar_ctbIsBtnSort, false)
+
+        val backBtn = typedArray.getBoolean(R.styleable.CustomToolbar_ctbIsBtnBack, false)
         setTitle(title)
         setButtonSettingsEnabled(changeSettings)
         setButtonSortEnabled(changeSort)
+        setButtonBackEnabled(backBtn)
     }
 
     private fun setTitle(title: String?) {
@@ -42,13 +45,17 @@ class CustomToolbar @JvmOverloads constructor(
         binding.settings.visibility = if (isEnabled) View.VISIBLE else View.GONE
     }
 
-    private fun setButtonSortEnabled(isEnabled: Boolean){
+    private fun setButtonSortEnabled(isEnabled: Boolean) {
         binding.sortCars.visibility = if (isEnabled) View.VISIBLE else View.GONE
+    }
+
+    private fun setButtonBackEnabled (isEnabled: Boolean){
+        binding.backBtn.visibility = if (isEnabled) View.VISIBLE else View.GONE
     }
 
 
     fun setSettingsClickListener(action: () -> Unit) {
-        binding.settings.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             action.invoke()
         }
     }

@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Car collection</string>
     <string name="head_app">Car collection</string>
+    <string name="head_add_car">Add car</string>
+    <string name="edit_name_car">Add name car</string>
+    <string name="edit_year_car">Add the year of manufacture of the car</string>
+    <string name="edit_engine_car">Add the engine capacity of the car</string>
+    <string name="add_car">Add</string>
 </resources>
