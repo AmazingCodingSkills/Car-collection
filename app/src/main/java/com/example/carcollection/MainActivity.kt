@@ -3,8 +3,8 @@ package com.example.carcollection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.commit
-import com.example.carcollection.cars.CarsFragment
-import com.example.carcollection.databinding.ActivityMainBinding
+import com.example.features.cars.CarsFragment
+import com.example.core.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         val fragment = CarsFragment.newInstance()
         supportFragmentManager.commit {
             replace(
-                R.id.fragment_container,
+                com.example.core.R.id.fragment_container,
                 fragment,
                 fragment::javaClass.name
             )
