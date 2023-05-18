@@ -30,6 +30,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDate
+import java.util.*
 
 class AddCarFragment : Fragment() {
 
@@ -74,7 +75,7 @@ class AddCarFragment : Fragment() {
         secondSetText = binding.editYearCar
         threeSetText = binding.editEngineCar
 
-        val currentDate = LocalDate.now().toEpochDay()
+        val currentDate = Date().time
         viewModel.handleAction(AddCarViewAction.Date(currentDate))
 
         addImageCar()
@@ -104,7 +105,6 @@ class AddCarFragment : Fragment() {
         binding.addButton.setOnClickListener {
             viewModel.handleAction(AddCarViewAction.SaveCar)
             binding.addButton.hideKeyboard()
-            xxx()
         }
     }
 
@@ -183,14 +183,6 @@ class AddCarFragment : Fragment() {
 
         return file.absolutePath
     }
-
-    private fun xxx() {
-        GlobalScope.launch {
-            val x = viewModel.carRepository.getAll()
-            Log.d("FFFF", "$x")
-        }
-    }
-
 
     companion object {
         const val PICK_PHOTO_REQUEST = 1
