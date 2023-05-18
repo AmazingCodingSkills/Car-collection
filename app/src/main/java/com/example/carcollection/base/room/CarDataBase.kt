@@ -2,6 +2,7 @@ package com.example.carcollection.base.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.example.carcollection.base.room.data.CarItemDao
 
 
 @Database(
