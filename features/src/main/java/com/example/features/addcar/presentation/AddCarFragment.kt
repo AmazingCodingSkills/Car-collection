@@ -12,9 +12,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.core.App
-import com.example.core.room.Cars
+import com.example.core.room.data.Cars
 import com.example.core.room.data.CarItemDao
+import com.example.core.view.hideKeyboard
 import com.example.core.view.showKeyboard
 import com.example.features.addcar.di.AddCarComponent
 import com.example.features.addcar.di.DaggerAddCarComponent
@@ -23,19 +29,23 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.time.LocalDate
 
 class AddCarFragment : Fragment() {
 
     private lateinit var binding: FragmentAddCarBinding
     private lateinit var contentResolver: ContentResolver
-    val myscope = CoroutineScope(Dispatchers.Main)
+
+    private var firstSetText: EditText? = null
+    private var secondSetText: EditText? = null
+    private var threeSetText: EditText? = null
 
     private val component: AddCarComponent by lazy {
         DaggerAddCarComponent.factory()
             .create(((activity?.applicationContext as? App)?.appComponent!!))
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val viewModel: AddCarViewModel by viewModels {
+        component.factoryAddCarViewModel()
     }
 
     override fun onCreateView(
@@ -60,10 +70,64 @@ class AddCarFragment : Fragment() {
         }
         binding.editNameCar.requestFocus()
         binding.editNameCar.showKeyboard()
-        addCar()
+        firstSetText = binding.editNameCar
+        secondSetText = binding.editYearCar
+        threeSetText = binding.editEngineCar
+
+        val currentDate = LocalDate.now().toEpochDay()
+        viewModel.handleAction(AddCarViewAction.Date(currentDate))
+
+        addImageCar()
+        setupViews()
+        observeViewState()
+
     }
 
-    private fun addCar() {
+    private fun setupViews() {
+
+        firstSetText?.addTextChangedListener {
+            val input = it.toString()
+            viewModel.handleAction(AddCarViewAction.NameCar(input))
+        }
+
+        binding.editYearCar.addTextChangedListener {
+            val input = it.toString()
+            viewModel.handleAction(AddCarViewAction.YearCar(input.toInt()))
+        }
+
+        binding.editEngineCar.addTextChangedListener {
+            val input = it.toString()
+            viewModel.handleAction(AddCarViewAction.EngineCar(input.toDouble()))
+        }
+
+
+        binding.addButton.setOnClickListener {
+            viewModel.handleAction(AddCarViewAction.SaveCar)
+            binding.addButton.hideKeyboard()
+            xxx()
+        }
+    }
+
+    private fun observeViewState() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.state.collect { state ->
+                when (state) {
+                    is AddCarViewState.Loading -> {
+                    }
+                    is AddCarViewState.Content -> {
+                    }
+                    is AddCarViewState.Empty -> {
+
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addImageCar() {
         binding.imageCar.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, PICK_PHOTO_REQUEST)
@@ -78,8 +142,7 @@ class AddCarFragment : Fragment() {
 
             try {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
-                //val x = component.providesRoom()
-                //saveCar(bitmap,x)
+                viewModel.handleAction(AddCarViewAction.ImageCar(saveBitmapToInternalStorage(bitmap)))
                 if (bitmap != null) {
                     binding.imageCar.setImageBitmap(bitmap)
                 } else {
@@ -121,22 +184,13 @@ class AddCarFragment : Fragment() {
         return file.absolutePath
     }
 
-    private fun saveCar(bitmap: Bitmap, carRepository: CarItemDao) {
-        val imagePath =
-            saveBitmapToInternalStorage(bitmap)
-
-        val cars =
-            Cars(name = "nissan", image = imagePath, year = 1985, engine = 3.5, date = 12)
+    private fun xxx() {
         GlobalScope.launch {
-            myscope.launch {
-                binding.imageCar.setImageBitmap(bitmap)
-                myscope.cancel()
-            }
-            carRepository.insertCar(cars)
-            val x = carRepository.getAllCars()
+            val x = viewModel.carRepository.getAll()
             Log.d("FFFF", "$x")
         }
     }
+
 
     companion object {
         const val PICK_PHOTO_REQUEST = 1

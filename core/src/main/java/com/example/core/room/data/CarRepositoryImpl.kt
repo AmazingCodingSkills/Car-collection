@@ -1,6 +1,5 @@
 package com.example.core.room.data
 
-import com.example.core.room.Cars
 import com.example.core.room.domain.CarRepository
 import javax.inject.Inject
 

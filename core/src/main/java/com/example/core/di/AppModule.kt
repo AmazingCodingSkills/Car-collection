@@ -8,11 +8,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 
-@Module(includes = [RoomModule::class])
+@Module()
 object AppModule {
-    @Provides
-    @Singleton
-    fun provideCarsRepository(carItemDao: CarItemDao): CarRepository {
-        return CarRepositoryImpl(carItemDao)
-    }
+
 }

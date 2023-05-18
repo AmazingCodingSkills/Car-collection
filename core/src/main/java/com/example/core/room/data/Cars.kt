@@ -1,8 +1,7 @@
-package com.example.core.room
+package com.example.core.room.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
 
 @Entity(tableName = "cars")
 data class Cars(

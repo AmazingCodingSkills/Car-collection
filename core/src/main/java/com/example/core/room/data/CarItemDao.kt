@@ -1,7 +1,6 @@
 package com.example.core.room.data
 
 import androidx.room.*
-import com.example.core.room.Cars
 
 @Dao
 interface CarItemDao {

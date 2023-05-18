@@ -1,6 +1,6 @@
 package com.example.core.room.domain
 
-import com.example.core.room.Cars
+import com.example.core.room.data.Cars
 
 interface CarRepository {
 

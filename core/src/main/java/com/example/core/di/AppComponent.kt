@@ -16,7 +16,7 @@ interface AppComponent {
             @BindsInstance application: Application
         ): AppComponent
     }
-    fun providesRoom (): CarItemDao
+
 }
 @Scope
 annotation class FragmentScope
