@@ -3,7 +3,7 @@ package com.example.carcollection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.commit
-import com.example.features.cars.CarsFragment
+import com.example.features.cars.presentation.CarsFragment
 import com.example.core.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
