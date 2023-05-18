@@ -12,13 +12,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.room.Room
 import com.example.carcollection.App
-import com.example.carcollection.base.room.AppDatabase
 import com.example.carcollection.base.room.Cars
-import com.example.carcollection.base.room.CarsRepository
+import com.example.carcollection.base.room.data.CarItemDao
 import com.example.carcollection.base.view.showKeyboard
 import com.example.carcollection.databinding.FragmentAddCarBinding
+import com.example.carcollection.di.AppComponent
+import com.example.carcollection.di.DaggerAppComponent
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
@@ -30,7 +30,10 @@ class AddCarFragment : Fragment() {
     private lateinit var contentResolver: ContentResolver
     val myscope = CoroutineScope(Dispatchers.Main)
 
-
+    private val component: AppComponent by lazy {
+        DaggerAppComponent.factory()
+            .create(App.application)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -75,6 +78,8 @@ class AddCarFragment : Fragment() {
 
             try {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
+                val x = component.providesRoom()
+                saveCar(bitmap,x)
                 if (bitmap != null) {
                     binding.imageCar.setImageBitmap(bitmap)
                 } else {
@@ -83,6 +88,7 @@ class AddCarFragment : Fragment() {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+
         }
     }
 
@@ -115,16 +121,10 @@ class AddCarFragment : Fragment() {
         return file.absolutePath
     }
 
-    private fun saveCar(bitmap: Bitmap) {
+    private fun saveCar(bitmap: Bitmap, carRepository: CarItemDao) {
         val imagePath =
             saveBitmapToInternalStorage(bitmap)
-        val db = Room.databaseBuilder(
-            App.application.applicationContext,
-            AppDatabase::class.java,
-            "cars"
-        ).build()
-        val carsDao = db.carItemDao()
-        val carsRepository = CarsRepository(carsDao)
+
         val cars =
             Cars(name = "nissan", image = imagePath, year = 1985, engine = 3.5, date = 12)
         GlobalScope.launch {
@@ -132,8 +132,8 @@ class AddCarFragment : Fragment() {
                 binding.imageCar.setImageBitmap(bitmap)
                 myscope.cancel()
             }
-            carsRepository.insert(cars)
-            val x = carsRepository.getAllCars()
+            carRepository.insertCar(cars)
+            val x = carRepository.getAllCars()
             Log.d("FFFF", "$x")
         }
     }

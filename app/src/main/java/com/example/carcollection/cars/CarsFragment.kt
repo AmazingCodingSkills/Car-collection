@@ -1,21 +1,13 @@
 package com.example.carcollection.cars
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.room.Room
-import com.example.carcollection.App
 import com.example.carcollection.R
 import com.example.carcollection.addcar.presentation.AddCarFragment
-import com.example.carcollection.base.room.AppDatabase
-import com.example.carcollection.base.room.Cars
-import com.example.carcollection.base.room.CarsRepository
 import com.example.carcollection.databinding.FragmentCarsBinding
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class CarsFragment : Fragment() {
 
@@ -35,7 +27,7 @@ class CarsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val db = Room.databaseBuilder(App.application.applicationContext, AppDatabase::class.java, "cars").build()
+        /*val db = Room.databaseBuilder(App.application.applicationContext, AppDatabase::class.java, "cars").build()
         val carsDao = db.carItemDao()
         val carsRepository = CarsRepository(carsDao)
         val car = Cars(2, "Car 1", R.drawable.ic_baseline_add_24.toString(), 2023, 2.0,17)
@@ -43,7 +35,7 @@ class CarsFragment : Fragment() {
             //carsRepository.insert(car)
             val x = carsRepository.getAllCars()
             Log.d("FFFF","$x")
-        }
+        }*/
         binding.floatingActionButton.setOnClickListener{
             val addCarFragment = AddCarFragment()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
