@@ -11,4 +11,9 @@ import javax.inject.Singleton
 @Module()
 object AppModule {
 
+    @Provides
+    @Singleton
+    fun provideCarRepository(carItemDao: CarItemDao): CarRepository {
+        return CarRepositoryImpl(carItemDao)
+    }
 }

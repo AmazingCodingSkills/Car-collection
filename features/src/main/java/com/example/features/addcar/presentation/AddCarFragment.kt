@@ -13,13 +13,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.core.App
-import com.example.core.room.data.Cars
-import com.example.core.room.data.CarItemDao
 import com.example.core.view.hideKeyboard
 import com.example.core.view.showKeyboard
 import com.example.features.addcar.di.AddCarComponent
@@ -29,7 +26,6 @@ import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.time.LocalDate
 import java.util.*
 
 class AddCarFragment : Fragment() {
@@ -75,9 +71,6 @@ class AddCarFragment : Fragment() {
         secondSetText = binding.editYearCar
         threeSetText = binding.editEngineCar
 
-        val currentDate = Date().time
-        viewModel.handleAction(AddCarViewAction.Date(currentDate))
-
         addImageCar()
         setupViews()
         observeViewState()
@@ -122,6 +115,16 @@ class AddCarFragment : Fragment() {
                     else -> {
 
                     }
+                }
+            }
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.events.collect { state ->
+                when (state) {
+                    is AddCarViewEvents.DismissScreen -> {
+                        requireActivity().supportFragmentManager.popBackStack()
+                    }
+
                 }
             }
         }
