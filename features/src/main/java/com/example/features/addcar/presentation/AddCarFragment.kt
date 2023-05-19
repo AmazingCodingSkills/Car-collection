@@ -13,29 +13,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.core.App
+import com.example.core.subscriptiondialog.SubscriptionDialogFragment
 import com.example.core.view.hideKeyboard
 import com.example.core.view.showKeyboard
 import com.example.features.addcar.di.AddCarComponent
 import com.example.features.addcar.di.DaggerAddCarComponent
 import com.example.features.databinding.FragmentAddCarBinding
-import kotlinx.coroutines.*
+import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.*
 
 class AddCarFragment : Fragment() {
 
     private lateinit var binding: FragmentAddCarBinding
     private lateinit var contentResolver: ContentResolver
+    private var subscriptionDialogFragment: SubscriptionDialogFragment? = null
 
-    private var firstSetText: EditText? = null
-    private var secondSetText: EditText? = null
-    private var threeSetText: EditText? = null
 
     private val component: AddCarComponent by lazy {
         DaggerAddCarComponent.factory()
@@ -58,28 +57,28 @@ class AddCarFragment : Fragment() {
 
         contentResolver = requireContext().contentResolver
 
-
-        binding.toolbarMainScreen.setSettingsClickListener {
-            val fr = requireActivity().supportFragmentManager
-            if (fr.backStackEntryCount > 0) {
-                fr.popBackStack()
-            }
+        binding.toolbarMainScreen.setBackClickListener {
+            close()
         }
         binding.editNameCar.requestFocus()
         binding.editNameCar.showKeyboard()
-        firstSetText = binding.editNameCar
-        secondSetText = binding.editYearCar
-        threeSetText = binding.editEngineCar
 
         addImageCar()
         setupViews()
-        observeViewState()
+        observeViewEvents()
 
+    }
+
+    private fun close() {
+        val fr = requireActivity().supportFragmentManager
+        if (fr.backStackEntryCount > 0) {
+            fr.popBackStack()
+        }
     }
 
     private fun setupViews() {
 
-        firstSetText?.addTextChangedListener {
+        binding.editNameCar?.addTextChangedListener {
             val input = it.toString()
             viewModel.handleAction(AddCarViewAction.NameCar(input))
         }
@@ -101,30 +100,26 @@ class AddCarFragment : Fragment() {
         }
     }
 
-    private fun observeViewState() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.state.collect { state ->
-                when (state) {
-                    is AddCarViewState.Loading -> {
-                    }
-                    is AddCarViewState.Content -> {
-                    }
-                    is AddCarViewState.Empty -> {
+    private fun observeViewEvents() {
 
-                    }
-                    else -> {
-
-                    }
-                }
-            }
-        }
         lifecycleScope.launchWhenStarted {
             viewModel.events.collect { state ->
                 when (state) {
                     is AddCarViewEvents.DismissScreen -> {
                         requireActivity().supportFragmentManager.popBackStack()
                     }
-
+                    is AddCarViewEvents.ShowDialog -> {
+                        showSubscriptionDialog()
+                    }
+                    is AddCarViewEvents.ValidationErrorDialog -> {
+                        view?.let {
+                            Snackbar.make(
+                                it,
+                                com.example.core.R.string.message,
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
             }
         }
@@ -186,6 +181,21 @@ class AddCarFragment : Fragment() {
 
         return file.absolutePath
     }
+
+    private fun showSubscriptionDialog() {
+        if (subscriptionDialogFragment == null) {
+            subscriptionDialogFragment = SubscriptionDialogFragment().apply {
+                okAction = {
+                    viewModel.buySub()
+                }
+                cancelAction = {
+                    close()
+                }
+            }
+        }
+        subscriptionDialogFragment?.show(childFragmentManager, "Dialog")
+    }
+
 
     companion object {
         const val PICK_PHOTO_REQUEST = 1

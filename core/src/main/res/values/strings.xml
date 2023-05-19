@@ -6,4 +6,17 @@
     <string name="edit_year_car">Добавтье год выпуска авто</string>
     <string name="edit_engine_car">Добавтье объем двигателя авто</string>
     <string name="add_car">Добавить</string>
+    <string name="subscription">Вы исчерпали лимит </string>
+    <string name="cost">Стоимость подписки: 1$</string>
+    <string name="period">Период подписки 1 минута.</string>
+    <string name="buy">Купить</string>
+    <string name="cancel">Нет, спасибо.</string>
+    <string name="select_car">Выбранное авто</string>
+    <string name="car_brand">Марка авто: %s</string>
+    <string name="car_year">Год выпуска: %s</string>
+    <string name="engine_capacity">Объем двигателя: %s</string>
+    <string name="date_add">Дата добавления в коллекцию: %s</string>
+    <string name="settings">Настройки</string>
+    <string name="reload_text">Сбросить в начальное стостояние</string>
+    <string name="message">Заполните все поля</string>
 </resources>

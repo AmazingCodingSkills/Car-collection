@@ -5,17 +5,13 @@ import androidx.room.*
 @Dao
 interface CarItemDao {
 
-    //олитика на уникальность
     @Insert
     suspend fun insertCar(cars: Cars)
 
-    @Update
-    suspend fun update(car: Cars)
-
-    @Delete
-    suspend fun delete(car: Cars)
-
     @Query("SELECT * FROM cars")
     suspend fun getAllCars(): List<Cars>
+
+    @Query("SELECT * FROM cars WHERE name LIKE :searchQuery OR year LIKE :searchQuery OR engine LIKE :searchQuery")
+    fun searchCars(searchQuery: String): List<Cars>
 
 }

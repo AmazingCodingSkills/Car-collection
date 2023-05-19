@@ -1,6 +1,5 @@
 package com.example.features.cars.presentation
 
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ class CarsAdapter(val onClick: (Cars) -> Unit) :
             Glide.with(itemView)
                 .load(item.image)
                 .into(imageCar)
-            //утечка
         }
 
         init {
