@@ -49,12 +49,17 @@ class CustomToolbar @JvmOverloads constructor(
         binding.sortCars.visibility = if (isEnabled) View.VISIBLE else View.GONE
     }
 
-    private fun setButtonBackEnabled (isEnabled: Boolean){
+    private fun setButtonBackEnabled(isEnabled: Boolean) {
         binding.backBtn.visibility = if (isEnabled) View.VISIBLE else View.GONE
     }
 
 
     fun setSettingsClickListener(action: () -> Unit) {
+        binding.settings.setOnClickListener {
+            action.invoke()
+        }
+    }
+    fun setBackClickListener(action: () -> Unit) {
         binding.backBtn.setOnClickListener {
             action.invoke()
         }

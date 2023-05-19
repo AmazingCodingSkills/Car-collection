@@ -6,7 +6,6 @@ sealed interface CarsViewState {
 
     object Loading : CarsViewState
 
-    object Success : CarsViewState
 
     data class Content(val cars: List<Cars>) : CarsViewState
 

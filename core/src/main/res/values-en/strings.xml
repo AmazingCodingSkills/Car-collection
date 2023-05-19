@@ -6,4 +6,17 @@
     <string name="edit_year_car">Add the year of manufacture of the car</string>
     <string name="edit_engine_car">Add the engine capacity of the car</string>
     <string name="add_car">Add</string>
+    <string name="subscription">You exceed limit</string>
+    <string name="cost">Cost subscription: 1$ "</string>
+    <string name="period">The subscription period is 1 minute.</string>
+    <string name="buy">Buy</string>
+    <string name="cancel">No,thanks.</string>
+    <string name="select_car">Select car</string>
+    <string name="car_brand">Name car: %s</string>
+    <string name="car_year">Release year: %s</string>
+    <string name="engine_capacity">Engine capacity: %s</string>
+    <string name="date_add">Date added to the collection: %s</string>
+    <string name="settings">Settings</string>
+    <string name="reload_text">Reset to initial state</string>
+    <string name="message">Fill all fields</string>
 </resources>

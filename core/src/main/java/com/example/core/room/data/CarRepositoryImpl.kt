@@ -16,16 +16,13 @@ class CarRepositoryImpl @Inject constructor(private val carItemDao: CarItemDao) 
         onEvent.tryEmit(Unit)
     }
 
-    override suspend fun update(cars: Cars) {
-        carItemDao.update(cars)
-    }
-
-    override suspend fun delete(cars: Cars) {
-        carItemDao.delete(cars)
-    }
-
     override suspend fun getAll(): List<Cars> {
         return carItemDao.getAllCars()
     }
+
+    override fun searchCars(searchQuery: String): List<Cars> {
+        return carItemDao.searchCars("%$searchQuery%")
+    }
+
 
 }

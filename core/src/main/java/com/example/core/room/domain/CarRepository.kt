@@ -9,10 +9,8 @@ interface CarRepository {
 
     suspend fun insertCar(cars: Cars)
 
-    suspend fun update(cars: Cars)
-
-    suspend fun delete(cars: Cars)
-
     suspend fun getAll(): List<Cars>
+
+    fun searchCars(searchQuery: String): List<Cars>
 
 }
