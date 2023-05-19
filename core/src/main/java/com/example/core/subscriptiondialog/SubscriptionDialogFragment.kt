@@ -46,7 +46,6 @@ class SubscriptionDialogFragment() : DialogFragment() {
             dismiss()
         }
         binding.noBuy.setOnClickListener {
-            cancelAction?.invoke()
             dismiss()
         }
     }
